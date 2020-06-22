@@ -44,7 +44,7 @@ export async function calculatePi(): Promise<void> {
 
   console.log("Start to calculate pi");
   let iteration = 0;
-  for (let k = new BigNumber(1); pi.precision() === 9999; k = k.plus(1)) {
+  for (let k = new BigNumber(1); pi.precision() < 9999; k = k.plus(1)) {
     M = K.exponentiatedBy(3)
       .minus(K.multipliedBy(16))
       .multipliedBy(M.dividedToIntegerBy(k.exponentiatedBy(3)));
