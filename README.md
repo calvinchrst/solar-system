@@ -1,4 +1,4 @@
-# Solar System
+# Solar System Backend
 Simple project to calculate pi and sun circumference (Backend)
 
 ## Getting Started
