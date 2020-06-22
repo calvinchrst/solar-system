@@ -1,6 +1,9 @@
 import BigNumber from "bignumber.js";
 
+import { sun } from "./planet";
+
 BigNumber.config({ DECIMAL_PLACES: 10000, POW_PRECISION: 10000 });
+let previousPi = new BigNumber(0.0)!;
 export let pi = new BigNumber(0.0)!;
 
 function setImmediatePromise() {
@@ -40,18 +43,36 @@ export async function calculatePi(): Promise<void> {
 
   console.log("Start to calculate pi");
   let iteration = 0;
-  for (let k = new BigNumber(1); true; k = k.plus(12)) {
+  for (let k = new BigNumber(1); pi.precision() === 9999; k = k.plus(1)) {
     M = K.exponentiatedBy(3)
       .minus(K.multipliedBy(16))
       .multipliedBy(M.dividedToIntegerBy(k.exponentiatedBy(3)));
     L = L.plus(addToL);
     X = X.multipliedBy(multToX);
     S = S.plus(M.multipliedBy(L).dividedBy(X));
-    pi = multToSqrt.multipliedBy(sqrtNr.squareRoot()).dividedBy(S);
+    K = K.plus(12);
+    let newPi = multToSqrt.multipliedBy(sqrtNr.squareRoot()).dividedBy(S);
     iteration += 1;
 
-    // Debugging info
-    console.log("Calculate Pi Iteration:", iteration);
+    // Debuginfo
+    // console.log("Calculate Pi Iteration:", iteration);
+
+    updatePi(newPi);
+
     await setImmediatePromise();
   }
+  console.log(
+    "Stop calculating pi as it has reached the maximum precision of 9999"
+  );
+}
+
+export function updatePi(newPi: BigNumber): void {
+  // Update pi with the latest precision
+  let diff = newPi.minus(previousPi)!;
+  const exponent = new BigNumber(diff.e!).absoluteValue().toNumber();
+  if (exponent > 0) {
+    pi = newPi.precision(exponent);
+    console.log("New Pi, precision:", pi.precision());
+  }
+  previousPi = newPi;
 }
