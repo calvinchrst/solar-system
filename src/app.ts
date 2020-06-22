@@ -9,6 +9,7 @@ import mathRoutes from "./routes/math";
 import planetRoutes from "./routes/planet";
 import { get404 } from "./controllers/error";
 import { calculatePi } from "./models/pi";
+import { initIOSocket } from "./util/socket";
 
 const app = express();
 
@@ -26,7 +27,11 @@ app.use("/math", mathRoutes);
 app.use("/planet", planetRoutes);
 app.use(get404);
 
-app.listen({ port: 3000 });
+const server = app.listen({ port: 8080 });
+const io = initIOSocket(server);
+io.on("connection", (socket) => {
+  console.log("Client Connected");
+});
 console.log("Server startup Done");
 
 calculatePi();

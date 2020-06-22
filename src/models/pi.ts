@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 
+import { getIOSocket } from "../util/socket";
 import { sun } from "./planet";
 
 BigNumber.config({ DECIMAL_PLACES: 10000, POW_PRECISION: 10000 });
@@ -72,7 +73,17 @@ export function updatePi(newPi: BigNumber): void {
   const exponent = new BigNumber(diff.e!).absoluteValue().toNumber();
   if (exponent > 0) {
     pi = newPi.precision(exponent);
+    updateClientNewPi();
     console.log("New Pi, precision:", pi.precision());
   }
   previousPi = newPi;
+}
+
+export function updateClientNewPi(): void {
+  let sunCircumference = sun.getCircumference();
+  getIOSocket().emit("newPi", {
+    pi: pi,
+    sunCircumference: sunCircumference,
+    sunCircumferenceUnit: sun.diameterUnit,
+  });
 }
