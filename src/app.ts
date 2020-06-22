@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 
 import mathRoutes from "./routes/math";
+import planetRoutes from "./routes/planet";
 import { get404 } from "./controllers/error";
 import { calculatePi } from "./models/pi";
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 
 // Routes available
 app.use("/math", mathRoutes);
+app.use("/planet", planetRoutes);
 app.use(get404);
 
 app.listen({ port: 3000 });
