@@ -20,6 +20,10 @@ app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use(bodyParser.json());
 
+// Routes available
+app.use("/math", mathRoutes);
+app.use(get404);
+
 app.listen({ port: 3000 });
 console.log("Server startup Done");
 
